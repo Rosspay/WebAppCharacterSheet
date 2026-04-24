@@ -1,0 +1,5 @@
+$kind: http-request
+name: Get Current User
+url: ""
+method: GET
+order: 4208235534572465
