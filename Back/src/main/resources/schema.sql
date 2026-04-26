@@ -15,3 +15,18 @@ CREATE TABLE IF NOT EXISTS refresh_tokens (
     expires_at  TIMESTAMP    NOT NULL,
     revoked     BOOLEAN      NOT NULL DEFAULT FALSE
 );
+
+CREATE TABLE IF NOT EXISTS templates (
+    id          BIGSERIAL    PRIMARY KEY,
+    owner_id    BIGINT       NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    title       VARCHAR(150) NOT NULL,
+    description TEXT,
+    is_public   BOOLEAN      NOT NULL DEFAULT FALSE,
+    content     JSONB        NOT NULL DEFAULT '[]',
+    created_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
+    updated_at  TIMESTAMP    NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_templates_owner   ON templates(owner_id);
+CREATE INDEX IF NOT EXISTS idx_templates_public  ON templates(is_public) WHERE is_public = TRUE;
+CREATE INDEX IF NOT EXISTS idx_templates_content ON templates USING GIN(content);

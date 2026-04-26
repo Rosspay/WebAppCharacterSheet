@@ -1,0 +1,11 @@
+name: local
+values:
+  - key: accessToken
+    enabled: true
+    value: ''
+  - key: templateId
+    enabled: true
+    value: ''
+  - key: refreshToken
+    enabled: true
+    value: ''

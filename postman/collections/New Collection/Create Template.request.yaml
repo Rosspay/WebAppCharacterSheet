@@ -1,0 +1,77 @@
+$kind: http-request
+name: Create Template
+url: http://localhost:8080/api/v1/templates
+method: POST
+headers:
+  Authorization: Bearer {{accessToken}}
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r
+
+    \  \"title\": \"D&D 5e — Лист персонажа\",\r
+
+    \  \"description\": \"Базовый шаблон для D&D 5-й редакции\",\r
+
+    \  \"content\": [\r
+
+    \    {\r
+
+    \      \"type\": \"CONTAINER\",\r
+
+    \      \"id\": \"c1\",\r
+
+    \      \"order\": 0,\r
+
+    \      \"title\": \"Основные характеристики\",\r
+
+    \      \"children\": [\r
+
+    \        { \"type\": \"BLOCK\",   \"id\": \"b1\",   \"order\": 0, \"label\": \"Сила\",      \"defaultValue\": 10 },\r
+
+    \        { \"type\": \"BLOCK\",   \"id\": \"b2\",   \"order\": 1, \"label\": \"Ловкость\",  \"defaultValue\": 10 },\r
+
+    \        { \"type\": \"BLOCK\",   \"id\": \"b3\",   \"order\": 2, \"label\": \"Телосложение\", \"defaultValue\": 10 },\r
+
+    \        { \"type\": \"COUNTER\", \"id\": \"cnt1\", \"order\": 3, \"label\": \"Здоровье\",  \"currentValue\": 20, \"maxValue\": 20 }\r
+
+    \      ]\r
+
+    \    },\r
+
+    \    {\r
+
+    \      \"type\": \"TABLE\",\r
+
+    \      \"id\": \"t1\",\r
+
+    \      \"order\": 1,\r
+
+    \      \"label\": \"Инвентарь\",\r
+
+    \      \"rows\": 10,\r
+
+    \      \"columns\": 3\r
+
+    \    },\r
+
+    \    {\r
+
+    \      \"type\": \"TEXT_FIELD\",\r
+
+    \      \"id\": \"tf1\",\r
+
+    \      \"order\": 2,\r
+
+    \      \"placeholder\": \"Предыстория персонажа...\"\r
+
+    \    }\r
+
+    \  ]\r
+
+    }"
+scripts:
+  - type: afterResponse
+    code: pm.environment.set("templateId", pm.response.json().id);
+    language: text/javascript
+order: 4478001144306550

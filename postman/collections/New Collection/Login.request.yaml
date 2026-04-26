@@ -12,11 +12,27 @@ body:
 
     }"
 scripts:
-  - type: beforeRequest
+  - type: afterResponse
     code: "const json = pm.response.json();\r
 
-      pm.environment.set(\"accessToken\", json.accessToken);\r
+      \r
 
-      pm.environment.set(\"refreshToken\", json.refreshToken);"
+      pm.environment.set(\"accessToken\",  json.accessToken);\r
+
+      pm.environment.set(\"refreshToken\", json.refreshToken);\r
+
+      \r
+
+      console.log(\"Токен сохранён:\", json.accessToken);\r
+
+      \r
+
+      pm.test(\"Логин успешен\", () => {\r
+
+      \    pm.response.to.have.status(200);\r
+
+      \    pm.expect(json.accessToken).to.be.a(\"string\");\r
+
+      });"
     language: text/javascript
 order: 3998300843922137

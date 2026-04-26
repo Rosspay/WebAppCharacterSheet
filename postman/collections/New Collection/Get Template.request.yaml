@@ -1,0 +1,7 @@
+$kind: http-request
+name: Get Template
+url: http://localhost:8080/api/v1/templates/{{templateId}}
+method: GET
+headers:
+  Authorization: Bearer {{accessToken}}
+order: 4491487549449173

@@ -2,8 +2,10 @@ package com.example.Back.config;
 
 
 import com.example.Back.security.JwtAuthenticationFilter;
+import com.example.Back.security.ReactiveUserDetailsServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,22 +32,20 @@ import java.util.Map;
 @Configuration
 @EnableWebFluxSecurity
 @EnableReactiveMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfig {
-
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final com.example.Back.security.ReactiveUserDetailsServiceImpl userDetailsService;
-
 
     @Bean
     public ObjectMapper objectMapper() {
         return new ObjectMapper()
-                .registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule())
-                .disable(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                .registerModule(new JavaTimeModule())
+                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
     }
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(
+            ServerHttpSecurity http,
+            JwtAuthenticationFilter jwtAuthenticationFilter,
+            ObjectMapper mapper) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -55,8 +55,9 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex
                         .authenticationEntryPoint((exchange, e) -> {
                             exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-                            exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                            byte[] body = writeJson(Map.of(
+                            exchange.getResponse().getHeaders()
+                                    .setContentType(MediaType.APPLICATION_JSON);
+                            byte[] body = writeJson(mapper, Map.of(
                                     "error", "Unauthorized",
                                     "message", e.getMessage()));
                             return exchange.getResponse().writeWith(
@@ -65,8 +66,9 @@ public class SecurityConfig {
                         })
                         .accessDeniedHandler((exchange, e) -> {
                             exchange.getResponse().setStatusCode(HttpStatus.FORBIDDEN);
-                            exchange.getResponse().getHeaders().setContentType(MediaType.APPLICATION_JSON);
-                            byte[] body = writeJson(Map.of(
+                            exchange.getResponse().getHeaders()
+                                    .setContentType(MediaType.APPLICATION_JSON);
+                            byte[] body = writeJson(mapper, Map.of(
                                     "error", "Forbidden",
                                     "message", e.getMessage()));
                             return exchange.getResponse().writeWith(
@@ -76,10 +78,12 @@ public class SecurityConfig {
                 )
                 .authorizeExchange(auth -> auth
                         .pathMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+                        .pathMatchers(HttpMethod.GET,  "/api/v1/templates/public").permitAll()
                         .pathMatchers("/actuator/health").permitAll()
                         .anyExchange().authenticated()
                 )
-                .addFilterBefore(jwtAuthenticationFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterBefore(jwtAuthenticationFilter,
+                        SecurityWebFiltersOrder.AUTHENTICATION)
                 .build();
     }
 
@@ -89,7 +93,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public ReactiveAuthenticationManager authenticationManager() {
+    public ReactiveAuthenticationManager authenticationManager(
+            ReactiveUserDetailsServiceImpl userDetailsService) {
         var manager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService);
         manager.setPasswordEncoder(passwordEncoder());
         return manager;
@@ -98,9 +103,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        // Разрешаем фронтенд на React dev server (настроить под продакшн)
-        config.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173"));
-        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        config.setAllowedOrigins(List.of("http://localhost:3000"));
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
         config.setMaxAge(3600L);
@@ -110,9 +114,9 @@ public class SecurityConfig {
         return source;
     }
 
-    private byte[] writeJson(Object value) {
+    private byte[] writeJson(ObjectMapper mapper, Object value) {
         try {
-            return objectMapper().writeValueAsBytes(value); // вызов локального бина
+            return mapper.writeValueAsBytes(value);
         } catch (Exception e) {
             return "{}".getBytes();
         }
