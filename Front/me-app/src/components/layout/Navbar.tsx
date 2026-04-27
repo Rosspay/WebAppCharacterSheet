@@ -23,6 +23,24 @@ export const Navbar: React.FC = () => {
         <Link className="navbar-brand fw-bold" to="/">
           TTRPG World
         </Link>
+        {isAuthenticated && (
+          <ul className="navbar-nav me-auto mb-0">
+            <li className="nav-item">
+              <Link className="nav-link" to="/templates/my">Мои шаблоны</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/templates/public">Публичные</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link text-white-50" to="/characters">
+                Персонажи{' '}
+                <span className="badge bg-secondary ms-1" style={{ fontSize: '0.6rem' }}>
+                  скоро
+                </span>
+              </Link>
+            </li>
+          </ul>
+        )}
         <div className="d-flex align-items-center gap-2">
           {isAuthenticated ? (
             <>
@@ -42,7 +60,9 @@ export const Navbar: React.FC = () => {
               <Link to="/register" className="btn btn-light btn-sm">Регистрация</Link>
             </>
           )}
+          
         </div>
+        
       </div>
     </nav>
   );

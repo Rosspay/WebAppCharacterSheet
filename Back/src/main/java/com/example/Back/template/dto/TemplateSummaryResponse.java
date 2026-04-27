@@ -10,12 +10,13 @@ public record TemplateSummaryResponse(
         String        title,
         String        description,
         boolean       isPublic,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt
 ) {
     public static TemplateSummaryResponse from(Template t) {
         return new TemplateSummaryResponse(
                 t.getId(), t.getOwnerId(), t.getTitle(),
-                t.getDescription(), t.isPublic(), t.getCreatedAt()
+                t.getDescription(), t.isPublic(), t.getCreatedAt(), t.getUpdatedAt()
         );
     }
 }

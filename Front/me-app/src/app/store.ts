@@ -1,14 +1,34 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import { authApi } from '../features/auth/authApi';
+import { templatesApi } from '../features/atemplates/templatesApi';
 import authReducer from '../features/auth/authSlice';
+import { templateEditorSlice } from '../features/atemplates/templateEditorSlice';
+
+const combinedReducer = combineReducers({
+  auth: authReducer,
+  templateEditor: templateEditorSlice.reducer,
+  [authApi.reducerPath]: authApi.reducer,
+  [templatesApi.reducerPath]: templatesApi.reducer,
+});
+
+const rootReducer = (state: any, action: any) => {
+  if (action.type === 'auth/logout') {
+    state = undefined;
+  }
+  return combinedReducer(state, action);
+};
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    templateEditor: templateEditorSlice.reducer,
     [authApi.reducerPath]: authApi.reducer,
+    [templatesApi.reducerPath]: templatesApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(authApi.middleware),
+    getDefaultMiddleware()
+  .concat(authApi.middleware)
+  .concat(templatesApi.middleware),
 });
 
 export type RootState = ReturnType<typeof store.getState>;

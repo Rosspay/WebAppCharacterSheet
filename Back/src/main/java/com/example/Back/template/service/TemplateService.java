@@ -40,7 +40,7 @@ public class TemplateService {
         return Mono.zip(
                 items.map(TemplateSummaryResponse::from).collectList(),
                 templateRepository.countByIsPublicTrue()
-        ).map(t -> new PageResponse<>(t.getT1(), t.getT2(), page, size));
+        ).map(t -> PageResponse.of(t.getT1(), t.getT2(), page, size));
     }
 
     public Mono<TemplateResponse> getById(Long id, String username) {

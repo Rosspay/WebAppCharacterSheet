@@ -1,7 +1,8 @@
 $kind: http-request
-name: Get Template
+name: Get Templates
 url: http://localhost:8080/api/v1/templates/{{templateId}}
 method: GET
 headers:
-  Authorization: Bearer {{accessToken}}
+  - key: Authorization
+    value: Bearer {{accessToken}}
 order: 4491487549449173

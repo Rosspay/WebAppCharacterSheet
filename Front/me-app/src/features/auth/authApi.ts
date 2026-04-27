@@ -16,7 +16,7 @@ import {
 } from '../../types/auth';
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: '/api/v1/auth',
+  baseUrl: '/api/v1',
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.accessToken;
     if (token) {
@@ -27,7 +27,7 @@ const baseQuery = fetchBaseQuery({
 });
 
 
-const baseQueryWithReauth: BaseQueryFn<
+export const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
   FetchBaseQueryError
@@ -68,19 +68,19 @@ export const authApi = createApi({
   baseQuery: baseQueryWithReauth,
   endpoints: (builder) => ({
     register: builder.mutation<TokenResponse, RegisterRequest>({
-      query: (body) => ({ url: '/register', method: 'POST', body }),
+      query: (body) => ({ url: '/auth/register', method: 'POST', body }),
     }),
     login: builder.mutation<TokenResponse, LoginRequest>({
-      query: (body) => ({ url: '/login', method: 'POST', body }),
+      query: (body) => ({ url: '/auth/login', method: 'POST', body }),
     }),
     refresh: builder.mutation<TokenResponse, RefreshRequest>({
-      query: (body) => ({ url: '/refresh', method: 'POST', body }),
+      query: (body) => ({ url: '/auth/refresh', method: 'POST', body }),
     }),
     logout: builder.mutation<void, void>({
-      query: () => ({ url: '/logout', method: 'POST' }),
+      query: () => ({ url: '/auth/logout', method: 'POST' }),
     }),
     getMe: builder.query<UserResponse, void>({
-      query: () => '/me',
+      query: () => '/auth/me',
     }),
   }),
 });
