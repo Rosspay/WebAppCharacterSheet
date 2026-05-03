@@ -23,7 +23,13 @@ export const templatesApi = createApi({
     >({
       query: ({ query = '', page = 0, size = 20 }) =>
         `/templates/public?query=${query}&page=${page}&size=${size}`,
-      providesTags: ['Template'],
+      providesTags: (result) =>
+    result
+      ? [
+          ...result.items.map(({ id }) => ({ type: 'Template' as const, id })),
+          { type: 'Template', id: 'PUBLIC_LIST' },   // ← добавить тег списка
+        ]
+      : [{ type: 'Template', id: 'PUBLIC_LIST' }],
     }),
 
     getTemplateById: builder.query<TemplateResponse, number>({
@@ -55,6 +61,7 @@ export const templatesApi = createApi({
       query: (id) => ({ url: `/templates/${id}/publish`, method: 'PATCH' }),
       invalidatesTags: (_r, _e, id) => [
         { type: 'Template', id },
+        { type: 'Template', id: 'PUBLIC_LIST' },
         'MyTemplates',
       ],
     }),

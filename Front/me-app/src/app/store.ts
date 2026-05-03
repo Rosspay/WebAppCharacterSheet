@@ -19,12 +19,7 @@ const rootReducer = (state: any, action: any) => {
 };
 
 export const store = configureStore({
-  reducer: {
-    auth: authReducer,
-    templateEditor: templateEditorSlice.reducer,
-    [authApi.reducerPath]: authApi.reducer,
-    [templatesApi.reducerPath]: templatesApi.reducer,
-  },
+  reducer: rootReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
   .concat(authApi.middleware)
