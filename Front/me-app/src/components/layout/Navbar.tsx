@@ -32,12 +32,10 @@ export const Navbar: React.FC = () => {
               <Link className="nav-link" to="/templates/public">Публичные</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link text-white-50" to="/characters">
-                Персонажи{' '}
-                <span className="badge bg-secondary ms-1" style={{ fontSize: '0.6rem' }}>
-                  скоро
-                </span>
-              </Link>
+              <Link className="nav-link" to="/characters/my">Мои персонажи</Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/characters/available">Персонажи</Link>
             </li>
           </ul>
         )}

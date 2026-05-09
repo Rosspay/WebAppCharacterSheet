@@ -1,5 +1,6 @@
 package com.example.Back.shared.config;
 
+import com.example.Back.shared.FieldValuesConverter;
 import com.example.Back.shared.JsonbConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,12 @@ public class R2dbcConfig {
     @Bean
     public R2dbcCustomConversions r2dbcCustomConversions() {
 
-        var writer = new JsonbConverter.TemplateContentWriter(objectMapper);
-        var reader = new JsonbConverter.TemplateContentReader(objectMapper);
+        var templateWriter = new JsonbConverter.TemplateContentWriter(objectMapper);
+        var templateReader = new JsonbConverter.TemplateContentReader(objectMapper);
 
-        return R2dbcCustomConversions.of(PostgresDialect.INSTANCE, List.of(writer, reader));
+        var fieldWriter = new FieldValuesConverter.FieldValuesWriter(objectMapper);
+        var fieldReader = new FieldValuesConverter.FieldValuesReader(objectMapper);
+
+        return R2dbcCustomConversions.of(PostgresDialect.INSTANCE, List.of(templateWriter, templateReader, fieldWriter, fieldReader));
     }
 }

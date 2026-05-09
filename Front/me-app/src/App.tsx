@@ -10,6 +10,11 @@ import PublicTemplatesPage from './pages/PublicTemplatesPage';
 import TemplateViewPage from './pages/TemplateViewPage';
 import TemplateEditorPage from './pages/TemplateEditorPage';
 import CharactersPage from './pages/CharactersPage';
+import MyCharactersPage from './pages/MyCharactersPage';
+import AvailableCharactersPage from './pages/AvailableCharactersPage';
+import CharacterEditorPage from './pages/CharacterEditorPage';
+import CharacterViewPage from './pages/CharacterViewPage';
+import VisibilityPage from './pages/VisibilityPage';
 import { useGetMeQuery } from './features/auth/authApi';
 import { useAppDispatch, useAppSelector } from './app/hooks';
 import { setUser } from './features/auth/authSlice';
@@ -40,7 +45,13 @@ const App: React.FC = () => (
         <Route path="/templates/new"      element={<TemplateEditorPage />} />
         <Route path="/templates/:id"      element={<TemplateViewPage />} />
         <Route path="/templates/:id/edit" element={<TemplateEditorPage />} />
-        <Route path="/characters"         element={<CharactersPage />} />
+        <Route path="/characters/my" element={<MyCharactersPage />} />
+        <Route path="/characters/available" element={<AvailableCharactersPage />} />
+        <Route path="/characters/new" element={<CharacterEditorPage />} />
+        <Route path="/characters/new/:templateId" element={<CharacterEditorPage />} />
+        <Route path="/characters/:id" element={<CharacterViewPage />} />
+        <Route path="/characters/:id/edit" element={<CharacterEditorPage />} />
+        <Route path="/characters/:id/visibility" element={<VisibilityPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" replace />} />
