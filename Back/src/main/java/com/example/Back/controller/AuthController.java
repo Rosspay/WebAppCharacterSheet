@@ -10,6 +10,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+/**
+ * REST endpoints for authentication: register, login, refresh, logout, current user and Yandex callback.
+ */
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -38,13 +41,20 @@ public class AuthController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("isAuthenticated()")
     public Mono<Void> logout(@AuthenticationPrincipal UserDetails userDetails) {
-        // userId нужно получать через UserRepository — упрощённо:
-        return authService.logout(null); // см. примечание ниже
+
+        return authService.logout(null);
     }
 
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
     public Mono<UserResponse> me(@AuthenticationPrincipal UserDetails userDetails) {
         return authService.getCurrentUser(userDetails.getUsername());
+    }
+
+
+    @PostMapping("/yandex/callback")
+    public Mono<TokenResponse> yandexCallback(
+            @Valid @RequestBody YandexCallbackRequest request) {
+        return authService.loginWithYandex(request.code(), request.redirectUri());
     }
 }

@@ -5,6 +5,9 @@ import com.example.Back.template.entity.TemplateNode;
 
 import java.time.LocalDateTime;
 import java.util.List;
+/**
+ * Full template DTO with the node tree.
+ */
 
 public record TemplateResponse(
         Long               id,

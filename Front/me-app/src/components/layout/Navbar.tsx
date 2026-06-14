@@ -37,6 +37,9 @@ export const Navbar: React.FC = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/characters/available">Персонажи</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/events">Мероприятия</Link>
+            </li>
           </ul>
         )}
         <div className="d-flex align-items-center gap-2">
@@ -58,9 +61,9 @@ export const Navbar: React.FC = () => {
               <Link to="/register" className="btn btn-light btn-sm">Регистрация</Link>
             </>
           )}
-          
+
         </div>
-        
+
       </div>
     </nav>
   );

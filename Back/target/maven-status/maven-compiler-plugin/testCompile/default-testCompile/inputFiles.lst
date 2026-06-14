@@ -1,0 +1,16 @@
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\BackApplicationTests.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\character\service\CharacterPdfServiceTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\character\service\CharacterServiceTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\event\service\EventServiceTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\integration\AuthControllerIT.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\integration\CharacterControllerIT.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\integration\CharacterPdfIT.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\integration\EventControllerIT.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\integration\TemplateControllerIT.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\integration\YandexOAuthIT.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\security\JwtServiceTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\service\AuthServiceTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\service\YandexOAuthServiceTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\shared\JsonbConverterTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\template\PageResponseTest.java
+D:\WebAppCharacterSheet\Back\src\test\java\com\example\Back\template\service\TemplateServiceTest.java

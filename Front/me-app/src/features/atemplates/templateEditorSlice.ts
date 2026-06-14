@@ -1,8 +1,19 @@
+/**
+ * Redux slice for the template editor. All actions perform immutable tree
+ * operations (add, update, delete) on the node array; Immer takes care of
+ * the structural sharing.
+ *
+ * The slice tracks an `isDirty` flag that is set on every mutation and
+ * cleared by `loadTemplate` / `resetEditor`, so the UI can prompt the user
+ * before navigating away from unsaved changes.
+ * @module
+ */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { TemplateNode, NodeType } from '../../types/template';
 import { nanoid } from '@reduxjs/toolkit';
 
-interface EditorState {
+/** Internal shape of the template editor state. */
+export interface EditorState {
   id: number | null;
   title: string;
   description: string;
@@ -20,6 +31,11 @@ const initialState: EditorState = {
   isDirty: false,
 };
 
+/**
+ * Builds a fresh template node with sensible defaults for the given type.
+ * The `order` is supplied by the caller so the new node can be appended at
+ * the end of its siblings.
+ */
 function makeNode(type: NodeType, order: number): TemplateNode {
   const base = { id: nanoid(), order, type } as const;
   switch (type) {
@@ -35,6 +51,7 @@ export const templateEditorSlice = createSlice({
   name: 'templateEditor',
   initialState,
   reducers: {
+    /** Replaces the entire editor state with the contents of an existing template and clears the dirty flag. */
     loadTemplate(state, action: PayloadAction<{ id: number; title: string; description: string; isPublic: boolean; content: TemplateNode[] }>) {
       const { id, title, description, isPublic, content } = action.payload;
       state.id = id;
@@ -45,6 +62,7 @@ export const templateEditorSlice = createSlice({
       state.isDirty = false;
     },
 
+    /** Resets the editor back to a blank template (no id, empty tree). */
     resetEditor(state) {
       Object.assign(state, initialState);
     },
@@ -64,12 +82,17 @@ export const templateEditorSlice = createSlice({
       state.isDirty = true;
     },
 
+    /** Appends a node of the given type to the root of the template tree. */
     addRootNode(state, action: PayloadAction<NodeType>) {
       const node = makeNode(action.payload, state.content.length);
       state.content.push(node);
       state.isDirty = true;
     },
 
+    /**
+     * Appends a node inside the container with `parentId`. No-op if the
+     * parent is missing or is not a CONTAINER (the only nestable type).
+     */
     addChildNode(state, action: PayloadAction<{ parentId: string; nodeType: NodeType }>) {
       const { parentId, nodeType } = action.payload;
       const parent = state.content.find(
@@ -82,6 +105,10 @@ export const templateEditorSlice = createSlice({
       }
     },
 
+    /**
+     * Shallow-merges `patch` into the node with `id`. Searches the root
+     * tier first, then descends into containers; first match wins.
+     */
     updateNode(state, action: PayloadAction<{ id: string; patch: Partial<TemplateNode> }>) {
       const { id, patch } = action.payload;
       const idx = state.content.findIndex((n) => n.id === id);
@@ -102,6 +129,11 @@ export const templateEditorSlice = createSlice({
       }
     },
 
+    /**
+     * Removes the node with the given id and renumbers `order` of its
+     * remaining siblings so the sequence stays gap-free. Searches the root
+     * tier first, then descends into containers.
+     */
     deleteNode(state, action: PayloadAction<string>) {
       const id = action.payload;
       const idx = state.content.findIndex((n) => n.id === id);

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useLoginMutation } from '../authApi';
 import { setTokens } from '../authSlice';
 import { useAppDispatch } from '../../../app/hooks';
+import { YandexLoginButton } from './YandexLoginButton';
 
 export const LoginForm: React.FC = () => {
   const navigate = useNavigate();
@@ -102,8 +103,14 @@ export const LoginForm: React.FC = () => {
           </button>
         </form>
 
-        <hr className="my-4" />
-        <p className="text-center mb-0" style={{ fontSize: '0.9rem' }}>
+        <div className="d-flex align-items-center my-3">
+          <hr className="flex-grow-1" />
+          <span className="px-2 text-muted small">или</span>
+          <hr className="flex-grow-1" />
+        </div>
+        <YandexLoginButton />
+
+        <p className="text-center mt-3 mb-0" style={{ fontSize: '0.9rem' }}>
           Нет аккаунта?{' '}
           <Link to="/register" className="text-decoration-none fw-medium">
             Зарегистрироваться

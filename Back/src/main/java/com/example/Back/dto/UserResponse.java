@@ -1,6 +1,9 @@
 package com.example.Back.dto;
 
 import com.example.Back.entity.User;
+/**
+ * User profile DTO returned by authentication and profile endpoints.
+ */
 
 public record UserResponse(Long id, String username, String email, String role) {
     public static UserResponse from(User user) {

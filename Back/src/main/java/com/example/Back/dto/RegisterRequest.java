@@ -3,6 +3,9 @@ package com.example.Back.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+/**
+ * Registration request payload (username, e-mail, password).
+ */
 
 public record RegisterRequest(
         @NotBlank @Size(min = 3, max = 50)

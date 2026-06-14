@@ -1,6 +1,9 @@
 package com.example.Back.template.dto;
 
 import java.util.List;
+/**
+ * Generic page response envelope with pagination metadata.
+ */
 
 public record PageResponse<T>(
         List<T> items,

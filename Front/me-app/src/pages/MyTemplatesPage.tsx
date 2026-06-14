@@ -87,7 +87,7 @@ const MyTemplatesPage: React.FC = () => {
         </div>
       )}
 
-      {/* Confirm delete modal */}
+      {}
       {confirmDelete !== null && (
         <div className="modal show d-block" style={{ background: 'rgba(0,0,0,0.4)' }}>
           <div className="modal-dialog modal-dialog-centered">

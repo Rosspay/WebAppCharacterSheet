@@ -8,6 +8,7 @@ import {
 } from '../features/characters/charactersApi';
 import { TemplateNode } from '../types/template';
 import { CharacterVisibility } from '../types/character';
+import UsernameAutocomplete from '../components/UsernameAutocomplete';
 
 const renderField = (
   node: TemplateNode,
@@ -125,7 +126,7 @@ const CharacterEditorPage: React.FC = () => {
     { skip: resolvedTemplateId == null || isNaN(resolvedTemplateId) }
   );
 
-  
+
 
   const [createCharacter, { isLoading: creating }] = useCreateCharacterMutation();
   const [updateCharacter, { isLoading: updating }] = useUpdateCharacterMutation();
@@ -134,7 +135,7 @@ const CharacterEditorPage: React.FC = () => {
   const [description, setDescription] = useState('');
   const [visibility, setVisibility]   = useState<CharacterVisibility>('PRIVATE');
   const [fieldValues, setFieldValues] = useState<Record<string, unknown>>({});
-  const [allowedIds, setAllowedIds]   = useState<number[]>([]);
+  const [allowedUsernames, setAllowedUsernames] = useState<string[]>([]);
   const [allowedInput, setAllowedInput] = useState('');
 
   useEffect(() => {
@@ -143,7 +144,7 @@ const CharacterEditorPage: React.FC = () => {
       setDescription(existing.description ?? '');
       setVisibility(existing.visibility);
       setFieldValues(existing.fieldValues ?? {});
-      setAllowedIds(existing.allowedUserIds ?? []);
+      setAllowedUsernames(existing.allowedUsernames ?? []);
     }
   }, [existing]);
 
@@ -163,7 +164,7 @@ const CharacterEditorPage: React.FC = () => {
       description,
       visibility,
       fieldValues,
-      allowedUserIds: allowedIds,
+      allowedUsernames,
     };
     if (isNew) {
       const result = await createCharacter(body).unwrap();
@@ -174,10 +175,10 @@ const CharacterEditorPage: React.FC = () => {
     }
   };
 
-  const addAllowedId = () => {
-    const uid = Number(allowedInput.trim());
-    if (uid && !allowedIds.includes(uid)) {
-      setAllowedIds((prev) => [...prev, uid]);
+  const addAllowedUsername = () => {
+    const name = allowedInput.trim();
+    if (name && !allowedUsernames.includes(name)) {
+      setAllowedUsernames((prev) => [...prev, name]);
       setAllowedInput('');
     }
   };
@@ -269,38 +270,42 @@ const CharacterEditorPage: React.FC = () => {
           {visibility === 'RESTRICTED' && (
             <div className="mb-3 p-3 border rounded bg-light">
               <label className="form-label fw-medium">
-                ID пользователей с доступом
+                Логины пользователей с доступом
               </label>
               <div className="d-flex gap-2 mb-2">
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="ID пользователя"
+                <UsernameAutocomplete
                   value={allowedInput}
-                  onChange={(e) => setAllowedInput(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && addAllowedId()}
+                  onChange={setAllowedInput}
+                  onPick={(u) => {
+                    if (!allowedUsernames.includes(u)) {
+                      setAllowedUsernames((prev) => [...prev, u]);
+                    }
+                    setAllowedInput('');
+                  }}
+                  placeholder="Логин пользователя"
+                  exclude={allowedUsernames}
                 />
                 <button
                   className="btn btn-outline-primary"
-                  onClick={addAllowedId}
+                  onClick={addAllowedUsername}
                   type="button"
                 >
                   Добавить
                 </button>
               </div>
               <div className="d-flex flex-wrap gap-1">
-                {allowedIds.map((uid) => (
+                {allowedUsernames.map((name) => (
                   <span
-                    key={uid}
+                    key={name}
                     className="badge bg-secondary d-flex align-items-center gap-1"
                   >
-                    #{uid}
+                    {name}
                     <button
                       type="button"
                       className="btn-close btn-close-white"
                       style={{ fontSize: '0.6rem' }}
                       onClick={() =>
-                        setAllowedIds((p) => p.filter((x) => x !== uid))
+                        setAllowedUsernames((p) => p.filter((x) => x !== name))
                       }
                       aria-label="Удалить"
                     />

@@ -1,0 +1,20 @@
+# Тестовый профиль. R2DBC URL подставляется Testcontainers через
+# @ServiceConnection, поэтому здесь оставлены только настройки JWT
+# и инициализации схемы.
+spring:
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema.sql
+
+app:
+  jwt:
+    # Тестовый секрет (256 бит). НЕ использовать в продакшене.
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
+
+logging:
+  level:
+    com.example.Back: INFO
+    org.springframework.r2dbc: WARN

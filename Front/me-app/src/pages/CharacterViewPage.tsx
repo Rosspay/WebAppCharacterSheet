@@ -1,4 +1,4 @@
-// src/pages/CharacterViewPage.tsx
+
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
@@ -8,6 +8,7 @@ import {
 } from '../features/characters/charactersApi';
 import { useGetTemplateByIdQuery } from '../features/atemplates/templatesApi';
 import { useAppSelector } from '../app/hooks';
+import { downloadCharacterPdf } from '../features/characters/downloadCharacterPdf';
 import { TemplateNode } from '../types/template';
 import { CharacterVisibility } from '../types/character';
 
@@ -139,6 +140,9 @@ const CharacterViewPage: React.FC = () => {
   const [deleteCharacter] = useDeleteCharacterMutation();
   const [setVisibility]   = useSetVisibilityMutation();
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const [pdfDownloading, setPdfDownloading] = useState(false);
+  const [pdfError, setPdfError] = useState<string | null>(null);
+  const accessToken = useAppSelector(s => s.auth.accessToken);
 
   if (isLoading) return (
     <div className="container py-5 text-center">
@@ -161,18 +165,31 @@ const CharacterViewPage: React.FC = () => {
     navigate('/characters/my');
   };
 
+  const handleDownloadPdf = async () => {
+    if (!character) return;
+    setPdfError(null);
+    setPdfDownloading(true);
+    try {
+      await downloadCharacterPdf(character.id, character.name, accessToken);
+    } catch (e: any) {
+      setPdfError(e?.message ?? 'Не удалось скачать PDF');
+    } finally {
+      setPdfDownloading(false);
+    }
+  };
+
   const togglePublic = () => {
     const newVis: CharacterVisibility =
       character.visibility === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC';
     setVisibility({
       id: character.id,
-      body: { visibility: newVis, allowedUserIds: [] },
+      body: { visibility: newVis, allowedUsernames: [] },
     });
   };
 
   return (
     <div className="container py-4" style={{ maxWidth: 720 }}>
-      {/* ── Шапка ── */}
+      {}
       <div className="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
         <div>
           <h1 className="h3 mb-1">{character.name}</h1>
@@ -189,6 +206,16 @@ const CharacterViewPage: React.FC = () => {
               Шаблон: <strong>{template.title}</strong>
             </span>
           )}
+        </div>
+
+        <div className="d-flex gap-2 flex-wrap">
+          <button
+            className="btn btn-sm btn-outline-primary"
+            onClick={handleDownloadPdf}
+            disabled={pdfDownloading}
+          >
+            {pdfDownloading ? 'Готовим PDF…' : 'Скачать PDF'}
+          </button>
         </div>
 
         {isOwner && (
@@ -234,6 +261,10 @@ const CharacterViewPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      {pdfError && (
+        <div className="alert alert-warning py-2">{pdfError}</div>
+      )}
 
       <h2 className="h5 mb-3">Характеристики</h2>
 

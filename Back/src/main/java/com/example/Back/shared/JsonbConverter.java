@@ -11,6 +11,9 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 
 import java.util.List;
+/**
+ * R2DBC converter for the {@code jsonb} ↔ {@link com.example.Back.template.TemplateNode} mapping used by template trees.
+ */
 
 
 public class JsonbConverter {

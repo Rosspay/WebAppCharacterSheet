@@ -10,6 +10,9 @@ import org.springframework.data.convert.ReadingConverter;
 import org.springframework.data.convert.WritingConverter;
 
 import java.util.Map;
+/**
+ * R2DBC converter for the {@code jsonb} ↔ {@code Map<String,Object>} mapping used by character field values.
+ */
 
 public class FieldValuesConverter {
 

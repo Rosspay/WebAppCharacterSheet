@@ -5,6 +5,7 @@ import {
   useSetVisibilityMutation,
 } from '../features/characters/charactersApi';
 import { CharacterVisibility } from '../types/character';
+import UsernameAutocomplete from '../components/UsernameAutocomplete';
 
 const VisibilityPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -12,19 +13,30 @@ const VisibilityPage: React.FC = () => {
   const { data: character } = useGetCharacterByIdQuery(Number(id));
   const [setVisibility, { isLoading }] = useSetVisibilityMutation();
 
-  const [vis, setVis]             = useState<CharacterVisibility>('PRIVATE');
-  const [allowedIds, setAllowedIds] = useState<number[]>([]);
-  const [input, setInput]           = useState('');
+  const [vis, setVis]                         = useState<CharacterVisibility>('PRIVATE');
+  const [allowedUsernames, setAllowedUsernames] = useState<string[]>([]);
+  const [input, setInput]                     = useState('');
 
   useEffect(() => {
     if (character) {
       setVis(character.visibility);
-      setAllowedIds(character.allowedUserIds ?? []);
+      setAllowedUsernames(character.allowedUsernames ?? []);
     }
   }, [character]);
 
+  const addName = () => {
+    const name = input.trim();
+    if (name && !allowedUsernames.includes(name)) {
+      setAllowedUsernames((p) => [...p, name]);
+    }
+    setInput('');
+  };
+
   const handleSave = async () => {
-    await setVisibility({ id: Number(id), body: { visibility: vis, allowedUserIds: allowedIds } }).unwrap();
+    await setVisibility({
+      id: Number(id),
+      body: { visibility: vis, allowedUsernames },
+    }).unwrap();
     navigate(`/characters/${id}`);
   };
 
@@ -43,43 +55,37 @@ const VisibilityPage: React.FC = () => {
 
       {vis === 'RESTRICTED' && (
         <div className="mb-3 p-3 border rounded bg-light">
-          <label className="form-label fw-medium">ID пользователей с доступом</label>
+          <label className="form-label fw-medium">Логины пользователей с доступом</label>
           <div className="d-flex gap-2 mb-2">
-            <input
-              type="number"
-              className="form-control"
-              placeholder="ID пользователя"
+            <UsernameAutocomplete
               value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  const uid = Number(input.trim());
-                  if (uid && !allowedIds.includes(uid)) setAllowedIds((p) => [...p, uid]);
-                  setInput('');
+              onChange={setInput}
+              onPick={(u) => {
+                if (!allowedUsernames.includes(u)) {
+                  setAllowedUsernames((p) => [...p, u]);
                 }
+                setInput('');
               }}
+              placeholder="Логин пользователя"
+              exclude={allowedUsernames}
             />
             <button
               className="btn btn-outline-primary"
               type="button"
-              onClick={() => {
-                const uid = Number(input.trim());
-                if (uid && !allowedIds.includes(uid)) setAllowedIds((p) => [...p, uid]);
-                setInput('');
-              }}
+              onClick={addName}
             >
               Добавить
             </button>
           </div>
           <div className="d-flex flex-wrap gap-1">
-            {allowedIds.map((uid) => (
-              <span key={uid} className="badge bg-secondary d-flex align-items-center gap-1">
-                #{uid}
+            {allowedUsernames.map((name) => (
+              <span key={name} className="badge bg-secondary d-flex align-items-center gap-1">
+                {name}
                 <button
                   type="button"
                   className="btn-close btn-close-white"
                   style={{ fontSize: '0.6rem' }}
-                  onClick={() => setAllowedIds((p) => p.filter((x) => x !== uid))}
+                  onClick={() => setAllowedUsernames((p) => p.filter((x) => x !== name))}
                   aria-label="Удалить"
                 />
               </span>

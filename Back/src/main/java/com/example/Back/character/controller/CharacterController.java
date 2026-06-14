@@ -5,12 +5,22 @@ import com.example.Back.character.service.CharacterService;
 import com.example.Back.template.dto.PageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.nio.charset.StandardCharsets;
+/**
+ * REST endpoints for characters: CRUD, visibility management and PDF export.
+ */
 
 @RestController
 @RequestMapping("/api/v1/characters")
@@ -71,5 +81,25 @@ public class CharacterController {
             @PathVariable Long id,
             @AuthenticationPrincipal UserDetails user) {
         return characterService.delete(id, user.getUsername());
+    }
+
+
+    @GetMapping(value = "/{id}/pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public Mono<ResponseEntity<ByteArrayResource>> exportPdf(
+            @PathVariable Long id,
+            @AuthenticationPrincipal UserDetails user) {
+        return characterService.exportPdf(id, user.getUsername())
+                .map(bytes -> {
+                    String filename = "character-" + id + ".pdf";
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentDisposition(ContentDisposition.attachment()
+                            .filename(filename, StandardCharsets.UTF_8)
+                            .build());
+                    return ResponseEntity.ok()
+                            .headers(headers)
+                            .contentType(MediaType.APPLICATION_PDF)
+                            .contentLength(bytes.length)
+                            .body(new ByteArrayResource(bytes));
+                });
     }
 }

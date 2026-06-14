@@ -28,6 +28,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.Map;
+/**
+ * Spring Security (WebFlux) configuration: JWT authentication filter, CORS policy, stateless session, and explicit 401/403 entry points.
+ */
 
 @Configuration
 @EnableWebFluxSecurity

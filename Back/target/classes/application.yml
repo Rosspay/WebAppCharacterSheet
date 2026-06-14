@@ -13,6 +13,12 @@ app:
     secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
     access-token-expiration: 900000
     refresh-token-expiration: 604800000
+  oauth:
+    yandex:
+      client-id:     ${YANDEX_CLIENT_ID:33b6b8beddf54af6ac8fad909d89ae6e}
+      client-secret: ${YANDEX_CLIENT_SECRET:15a36654e80d49108023d8ecec9e4b72}
+      token-uri:     ${YANDEX_TOKEN_URI:https://oauth.yandex.ru/token}
+      user-info-uri: ${YANDEX_USER_INFO_URI:https://login.yandex.ru/info}
 
 server:
   port: 8080

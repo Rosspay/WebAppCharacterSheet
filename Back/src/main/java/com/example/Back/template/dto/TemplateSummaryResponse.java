@@ -3,6 +3,9 @@ package com.example.Back.template.dto;
 import com.example.Back.template.entity.Template;
 
 import java.time.LocalDateTime;
+/**
+ * Summary template DTO without the tree, used for listings.
+ */
 
 public record TemplateSummaryResponse(
         Long          id,

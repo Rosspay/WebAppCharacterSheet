@@ -1,4 +1,7 @@
 package com.example.Back.dto;
+/**
+ * Authentication response carrying the new access/refresh token pair and the access-token TTL.
+ */
 
 public record TokenResponse(
         String accessToken,

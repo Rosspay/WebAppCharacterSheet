@@ -6,6 +6,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 import java.util.List;
+/**
+ * Request payload to create or update a template.
+ */
 
 public record TemplateRequest(
         @NotBlank @Size(max = 150)

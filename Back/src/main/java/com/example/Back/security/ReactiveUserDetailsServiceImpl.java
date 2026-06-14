@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+/**
+ * Reactive UserDetailsService backed by {@link com.example.Back.repository.UserRepository}.
+ */
 
 @Service
 @RequiredArgsConstructor

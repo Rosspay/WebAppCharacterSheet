@@ -7,6 +7,10 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 import java.util.Map;
+/**
+ * Request payload to create or update a character.
+ */
+
 
 public record CharacterRequest(
         @NotNull Long templateId,
@@ -14,5 +18,5 @@ public record CharacterRequest(
         @Size(max = 1000) String description,
         @Pattern(regexp = "PRIVATE|PUBLIC|RESTRICTED") String visibility,
         @NotNull Map<String, Object> fieldValues,
-        List<Long> allowedUserIds
+        List<String> allowedUsernames
 ) {}

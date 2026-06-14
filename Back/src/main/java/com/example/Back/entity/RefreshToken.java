@@ -8,6 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+/**
+ * Refresh token entity persisted in the {@code refresh_tokens} table. Each token has a signed value, an owner and an expiration timestamp.
+ */
 
 @Data
 @Builder

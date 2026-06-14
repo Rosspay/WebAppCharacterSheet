@@ -6,6 +6,9 @@ import org.springframework.data.r2dbc.repository.Query;
 import org.springframework.data.repository.reactive.ReactiveCrudRepository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+/**
+ * Reactive repository for {@link com.example.Back.character.entity.Character}.
+ */
 
 public interface CharacterRepository extends ReactiveCrudRepository<Character, Long> {
 

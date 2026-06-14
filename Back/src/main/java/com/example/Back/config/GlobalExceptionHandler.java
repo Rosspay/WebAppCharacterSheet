@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.WebExchangeBindException;
 
 import java.util.Map;
+/**
+ * Global REST exception handler mapping business errors and validation failures to structured JSON responses with the appropriate HTTP status.
+ */
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

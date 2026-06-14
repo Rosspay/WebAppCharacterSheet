@@ -1,0 +1,32 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "src/app/store.ts",
+    "src/app/hooks.ts",
+    "src/features/auth/authApi.ts",
+    "src/features/auth/authSlice.ts",
+    "src/features/atemplates/templatesApi.ts",
+    "src/features/atemplates/templateEditorSlice.ts",
+    "src/features/characters/charactersApi.ts",
+    "src/features/characters/downloadCharacterPdf.ts",
+    "src/features/events/eventsApi.ts",
+    "src/features/users/usersApi.ts",
+    "src/components/UsernameAutocomplete.tsx",
+    "src/types/template.ts",
+    "src/types/character.ts",
+    "src/types/event.ts",
+    "src/types/auth.ts"
+  ],
+  "out": "docs",
+  "tsconfig": "tsconfig.json",
+  "name": "me-app: TTRPG client",
+  "readme": "none",
+  "hideGenerator": true,
+  "githubPages": false,
+  "skipErrorChecking": true,
+  "excludeExternals": true,
+  "excludePrivate": false,
+  "excludeProtected": false,
+  "excludeInternal": false,
+  "categorizeByGroup": true
+}

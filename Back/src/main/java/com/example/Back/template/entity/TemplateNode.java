@@ -22,6 +22,9 @@ import java.util.List;
         @JsonSubTypes.Type(value = TemplateNode.TableNode.class,      name = "TABLE"),
         @JsonSubTypes.Type(value = TemplateNode.TextFieldNode.class,  name = "TEXT_FIELD"),
 })
+/**
+ * Template tree node: contains its type, key, metadata and children.
+ */
 public sealed interface TemplateNode
         permits TemplateNode.ContainerNode,
         TemplateNode.BlockNode,

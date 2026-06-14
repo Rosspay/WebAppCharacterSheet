@@ -8,6 +8,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
+/**
+ * User account entity persisted in the {@code users} table.
+ */
 
 @Data
 @Builder
@@ -19,11 +22,17 @@ public class User {
     private Long id;
     private String username;
     private String email;
+
     private String password;
     @Builder.Default
     private String role = "ROLE_USER";
     @Builder.Default
     private boolean enabled = true;
+
+    @Builder.Default
+    private String provider = "LOCAL";
+
+    private String yandexId;
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 }

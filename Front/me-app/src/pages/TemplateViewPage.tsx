@@ -47,7 +47,7 @@ const TemplateViewPage: React.FC = () => {
               </Link>
             </>
           )}
-          <button 
+          <button
             className="btn btn-outline-success btn-sm"
             onClick={() => navigate(`/characters/new?templateId=${template.id}`)}
           >

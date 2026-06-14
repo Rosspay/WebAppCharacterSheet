@@ -14,6 +14,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+/**
+ * Service managing character-sheet templates and ownership checks.
+ */
 
 @Service
 @RequiredArgsConstructor
@@ -97,7 +100,7 @@ public class TemplateService {
                 .flatMap(t -> templateRepository.deleteById(t.getId()));
     }
 
-    // ── helpers ───────────────────────────────────────────────────────────────
+
 
     private Mono<Long> resolveUserId(String username) {
         return userRepository.findByUsername(username)

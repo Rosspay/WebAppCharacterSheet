@@ -7,6 +7,9 @@ import org.springframework.data.relational.core.mapping.Table;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+/**
+ * Character entity persisted in the {@code characters} table.
+ */
 
 @Data
 @Builder

@@ -1,3 +1,11 @@
+/**
+ * RTK Query API for character-sheet templates: CRUD, pagination, title
+ * search and the "my templates" / "public templates" listings.
+ *
+ * Cache tagging keeps `MyTemplates` and individual `Template:<id>` entries
+ * in sync so a publish/delete on one screen refreshes the relevant lists.
+ * @module
+ */
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../auth/authApi';
 import type {
@@ -27,7 +35,7 @@ export const templatesApi = createApi({
     result
       ? [
           ...result.items.map(({ id }) => ({ type: 'Template' as const, id })),
-          { type: 'Template', id: 'PUBLIC_LIST' },   // ← добавить тег списка
+          { type: 'Template', id: 'PUBLIC_LIST' },
         ]
       : [{ type: 'Template', id: 'PUBLIC_LIST' }],
     }),

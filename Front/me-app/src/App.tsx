@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Navbar } from './components/layout/Navbar';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
@@ -9,27 +9,15 @@ import MyTemplatesPage from './pages/MyTemplatesPage';
 import PublicTemplatesPage from './pages/PublicTemplatesPage';
 import TemplateViewPage from './pages/TemplateViewPage';
 import TemplateEditorPage from './pages/TemplateEditorPage';
-import CharactersPage from './pages/CharactersPage';
 import MyCharactersPage from './pages/MyCharactersPage';
 import AvailableCharactersPage from './pages/AvailableCharactersPage';
 import CharacterEditorPage from './pages/CharacterEditorPage';
 import CharacterViewPage from './pages/CharacterViewPage';
 import VisibilityPage from './pages/VisibilityPage';
-import { useGetMeQuery } from './features/auth/authApi';
-import { useAppDispatch, useAppSelector } from './app/hooks';
-import { setUser } from './features/auth/authSlice';
-
-const AuthLoader: React.FC = () => {
-  const dispatch = useAppDispatch();
-  const isAuthenticated = useAppSelector((s) => s.auth.isAuthenticated);
-  const { data } = useGetMeQuery(undefined, { skip: !isAuthenticated });
-
-  useEffect(() => {
-    if (data) dispatch(setUser(data));
-  }, [data, dispatch]);
-
-  return null;
-};
+import EventListPage from './pages/events/EventListPage';
+import EventEditorPage from './pages/events/EventEditorPage';
+import EventDetailsPage from './pages/events/EventDetailsPage';
+import YandexCallbackPage from './pages/YandexCallbackPage';
 
 const App: React.FC = () => (
   <BrowserRouter>
@@ -37,6 +25,7 @@ const App: React.FC = () => (
     <Routes>
       <Route path="/login"    element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/auth/yandex/callback" element={<YandexCallbackPage />} />
 
       <Route element={<ProtectedRoute />}>
         <Route path="/dashboard" element={<DashboardPage />} />
@@ -52,6 +41,10 @@ const App: React.FC = () => (
         <Route path="/characters/:id" element={<CharacterViewPage />} />
         <Route path="/characters/:id/edit" element={<CharacterEditorPage />} />
         <Route path="/characters/:id/visibility" element={<VisibilityPage />} />
+        <Route path="/events" element={<EventListPage />} />
+        <Route path="/events/new" element={<EventEditorPage />} />
+        <Route path="/events/:id" element={<EventDetailsPage />} />
+        <Route path="/events/:id/edit" element={<EventEditorPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/login" replace />} />

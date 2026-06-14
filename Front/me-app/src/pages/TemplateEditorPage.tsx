@@ -55,7 +55,7 @@ const TemplateEditorPage: React.FC = () => {
         await updateTemplate({ id: Number(id), body }).unwrap();
       }
     } catch {
-      // ошибка обрабатывается глобально
+
     }
   };
 
@@ -72,7 +72,7 @@ const TemplateEditorPage: React.FC = () => {
         </button>
       </div>
 
-      {/* Meta */}
+      {}
       <div className="card mb-4 shadow-sm">
         <div className="card-body">
           <div className="mb-3">
@@ -110,7 +110,7 @@ const TemplateEditorPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Node editor */}
+      {}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h2 className="h5 mb-0">Содержимое</h2>
         <AddNodeMenu parentId={null} />

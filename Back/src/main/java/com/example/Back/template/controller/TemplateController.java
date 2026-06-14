@@ -10,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+/**
+ * REST endpoints for character-sheet templates: CRUD, listing, pagination and search.
+ */
 
 @RestController
 @RequestMapping("/api/v1/templates")

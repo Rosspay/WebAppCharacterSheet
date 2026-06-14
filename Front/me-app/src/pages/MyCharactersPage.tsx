@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   useGetMyCharactersQuery,
   useDeleteCharacterMutation,
@@ -20,7 +20,6 @@ const VISIBILITY_BADGE: Record<CharacterVisibility, string> = {
 };
 
 const MyCharactersPage: React.FC = () => {
-  const navigate = useNavigate();
   const { data: characters, isLoading, isError } = useGetMyCharactersQuery();
   const [deleteCharacter] = useDeleteCharacterMutation();
   const [setVisibility] = useSetVisibilityMutation();
@@ -88,7 +87,7 @@ const MyCharactersPage: React.FC = () => {
                         id: c.id,
                         body: {
                           visibility: c.visibility === 'PUBLIC' ? 'PRIVATE' : 'PUBLIC',
-                          allowedUserIds: [],
+                          allowedUsernames: [],
                         },
                       })
                     }

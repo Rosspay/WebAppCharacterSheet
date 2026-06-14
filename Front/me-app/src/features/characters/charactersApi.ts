@@ -1,3 +1,10 @@
+/**
+ * RTK Query API for characters: CRUD, visibility control and the
+ * `allowedUsernames` access list. PDF export is delegated to the dedicated
+ * helper in `downloadCharacterPdf.ts` because it returns a Blob that does
+ * not fit RTK Query's JSON-only response model.
+ * @module
+ */
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../auth/authApi';
 import type {
